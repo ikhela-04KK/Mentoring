@@ -15,13 +15,13 @@ services:
     <<: *defaults
     container_name: web
     build:
-      # context: .
+      context: .
       dockerfile: ./apps/web/Dockerfile
     restart: always
-    volumes: 
-      - ./apps/web:/app/apps/web
-      - /app/apps/web/node_modules
-      - /app/.next
+    # volumes: 
+    #   - ./apps/web:/app/apps/web
+    #   - /app/apps/web/node_modules
+    #   - /app/.next
 
     ports:
       - $WEB_lOCAL_PORT:$WEB_DOCKER_PORT 
@@ -30,15 +30,15 @@ services:
     <<: *defaults
     container_name: api
     build:
-      # context: .
+      context: .
       dockerfile: ./apps/api/Dockerfile
     depends_on:
       - postgres
       - redis
   # adapter ça en fonction de ton environnement
-    volumes:
-      - ./apps/api:/app/apps/api
-      - /app/apps/apinode_modules
+    # volumes:
+    #   - ./apps/api:/app/apps/api
+    #   - /app/apps/apinode_modules
     restart: always
     ports:
       - $API_LOCAL_PORT:$API_DOCKER_PORT
@@ -48,8 +48,8 @@ services:
     <<: *defaults
     container_name: ngnix
     build: 
-      dockerfile: ./apps/ngnix/Dockerfile
-      context: ./apps/nginx    
+      context: .
+      dockerfile: ./apps/api/ngnix/Dockerfile
     ports:
       - $NGNIX_LOCAL_PORT:$NGNIX_DOCKER_PORT
     depends_on: 

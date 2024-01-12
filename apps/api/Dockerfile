@@ -11,28 +11,29 @@ RUN apk update
 WORKDIR /app
 RUN npm install turbo --global
 COPY . .
-RUN turbo prune api --docker
+# RUN turbo prune api --docker
 
 # Add lockfile and package.json's of isolated subworkspace
-FROM base AS installer
-RUN apk add --no-cache libc6-compat
-RUN apk update
-WORKDIR /app
+# FROM base AS installer
+# RUN apk add --no-cache libc6-compat
+# RUN apk update
+# WORKDIR /app
 
 
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/package-lock.json ./package-lock.json
-COPY --from=builder /app/apps/api/prisma ./prisma
-COPY --from=builder /app/turbo.json ./turbo.json
-
+# COPY --from=builder /app/out/json/ .
+# COPY --from=builder /app/out/package-lock.json ./package-lock.json
+# COPY --from=builder /app/apps/api/prisma ./prisma
+# COPY --from=builder /app/turbo.json ./turbo.json
+# RUN npx prisma generate 
+# RUN npx prisma db push
 RUN npm install
-RUN npx prisma generate 
+RUN npx prisma generate
 
 # Build the project and its dependencies
-COPY --from=builder /app/out/full/ .
-# COPY turbo.json turbo.json
+# COPY --from=builder /app/out/full/ .
+COPY turbo.json turbo.json
 
 # Uncomment and use build args to enable remote caching
 # ARG TURBO_TEAM
@@ -43,14 +44,13 @@ COPY --from=builder /app/out/full/ .
 
 RUN npx turbo build --filter=api...
 
-FROM base AS runner
-WORKDIR /app
+# FROM base AS runner
+# WORKDIR /app
 
 # Don't run production as root
-RUN addgroup --system --gid 1001 nestjs
-RUN adduser --system --uid 1001 nestjs
-USER nestjs
-
+# RUN addgroup --system --gid 1001 nestjs
+# RUN adduser --system --uid 1001 nestjs
+# USER nestjs
 EXPOSE ${API_LOCAL_PORT}
-CMD npm run dev
-
+# ENTRYPOINT [ "/bin/sh"; "-c","npx prisma generate" ]
+CMD ["npm", "run", "start:dev"]
