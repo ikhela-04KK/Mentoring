@@ -1,6 +1,9 @@
 ## Link for design file 
 [Mentoring App](https://www.figma.com/design/jQJ2jGnbUXLjHtIuHQtpmD/Untitled?node-id=0-1&node-type=CANVAS&t=YxDjJAhQYLT0GZ1S-0)
 
+![image](https://github.com/user-attachments/assets/76335fee-640a-405c-8f03-d5487dfa777f)
+
+
 # Turborepo Docker starter
 
 This is an official Docker starter Turborepo.
